@@ -3,6 +3,12 @@
 The aim of this project is to create a webapp that is unsecure by design. The app should contain at least five flaws from the OWASP top ten list.
 The project is done as part of the course [Cyber Security Base 2020](https://cybersecuritybase.mooc.fi/).
 
+## Installation
+
+You need python 3 with pip installed. Clone the repository, cd to the cloned repository and create a new virtual environment `python3 -m venv venv`. Now activate the newly installed venv `source venv/bin/activate`. Note that the venv activation command will depend on your OS and shell. With the venv activated, run `pip install -r requirements.txt` to install the needed requirements.
+
+The app can be started with `python manage.py runserver`.
+
 ## Vulnerabilities
 
 These are the vulnerabilities present in the app:
