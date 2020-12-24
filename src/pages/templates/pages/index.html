@@ -18,6 +18,32 @@
 			{% csrf_token %}
             <input type="submit" value="Logout"/>
         </form>
+
+        <h2>Your chirps</h2>
+
+		{% for msg in msgs %}
+
+		<i>From {{msg.source.username}} to {{msg.target.username}}</i></br>
+		{{msg.content|safe}}
+		</br>
+		</br>
+
+		{% endfor %}
+
+        <h2>Send a chirp</h2>
+
+        <form action='addMessage/' method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            To:
+            <select name="to">
+            {% for user in users %}
+                <option value="{{user.username}}">{{user.username}}</option>
+            {% endfor %}
+            </select><br/>
+
+			<textarea name="content" cols="40" rows="5"></textarea><br/>
+            <input type="submit" value="Send"/>
+        </form>
 		
         <h2>Your files</h2>
 

@@ -4,7 +4,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.models import User
 from django.views import View
-from .models import File
+from django.db.models import Q
+from .models import File, Message
 
 
 @login_required
@@ -36,10 +37,21 @@ def addView(request):
 
 
 @login_required
+def addMessage(request):
+    target = User.objects.get(username=request.POST.get('to'))
+    Message.objects.create(source=request.user, target=target,
+                           content=request.POST.get('content'))
+    return redirect('/')
+
+
+@login_required
 def homePageView(request):
     files = File.objects.filter(owner=request.user)
     uploads = [{'id': f.id, 'name': f.data.name.split('/')[-1]} for f in files]
-    return render(request, 'pages/index.html', {'uploads': uploads})
+    messages = Message.objects.filter(
+        Q(source=request.user) | Q(target=request.user))
+    users = User.objects.exclude(pk=request.user.id)
+    return render(request, 'pages/index.html', {'uploads': uploads, 'msgs': messages, 'users': users})
 
 
 class RegisterView(View):
