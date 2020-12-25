@@ -14,16 +14,13 @@ import sqlite3
 @login_required
 def deleteView(request):
     f = File.objects.get(pk=request.POST.get('id'))
-    if (f.owner == request.user):
-        f.delete()
+    f.delete()
     return redirect('/')
 
 
 @login_required
 def downloadView(request, fileid):
     f = File.objects.get(pk=fileid)
-    if (f.owner != request.user):
-        return redirect('/')
     filename = f.data.name.split('/')[-1]
     response = HttpResponse(f.data, content_type='text/plain')
     response['Content-Disposition'] = 'attachment; filename=%s' % filename
