@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import homePageView, addView, deleteView, downloadView, RegisterView, addMessage
+from .views import homePageView, addView, deleteView, downloadView, RegisterView, addMessage, changeName
 
 urlpatterns = [
     path('', homePageView, name='home'),
@@ -9,4 +9,5 @@ urlpatterns = [
     path('addMessage/', addMessage, name='addMessage'),
     path('download/<int:fileid>', downloadView, name='add'),
     path('delete/', deleteView, name='delete'),
+    path('changeName/', changeName, name='changeName')
 ]

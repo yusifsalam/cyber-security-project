@@ -5,7 +5,10 @@ from django.shortcuts import render, redirect, reverse
 from django.contrib.auth.models import User
 from django.views import View
 from django.db.models import Q
+from django import forms
 from .models import File, Message
+import logging
+import sqlite3
 
 
 @login_required
@@ -54,6 +57,24 @@ def homePageView(request):
     return render(request, 'pages/index.html', {'uploads': uploads, 'msgs': messages, 'users': users})
 
 
+@login_required
+def changeName(request):
+    if request.method == 'GET':
+        return render(request, 'pages/name.html', {'form': ChangeNameForm(), 'name': request.user.username})
+    else:
+        form = ChangeNameForm(request.POST)
+        new_name = ''
+        if form.is_valid():
+            new_name = form.cleaned_data['new_name']
+            conn = sqlite3.connect('src/db.sqlite3')
+            cursor = conn.cursor()
+            statement = "update auth_user set username = '%s' where id = %d" % (
+                new_name, request.user.id)
+            cursor.execute(statement)
+            conn.commit()
+        return redirect('/')
+
+
 class RegisterView(View):
     def get(self, request):
         return render(request, 'pages/register.html', {'form': UserCreationForm()})
@@ -65,3 +86,7 @@ class RegisterView(View):
             return redirect(reverse('login'))
 
         return render(request, 'pages/register.html', {'form': form})
+
+
+class ChangeNameForm(forms.Form):
+    new_name = forms.CharField(label='New name', max_length=100)

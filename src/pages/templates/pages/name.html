@@ -1,0 +1,7 @@
+<h2>Change your name</h2>
+<form action="/changeName/" method="POST">
+  {% csrf_token %}
+  <p>Current name: {{ name }}</p>
+  {{ form.as_p }}
+  <input type="submit" value="Change name" />
+</form>
